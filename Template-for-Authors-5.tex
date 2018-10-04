@@ -1,0 +1,474 @@
+\documentclass[a4paper,openright,10pt]{article}
+\usepackage[spanish]{babel} % para escribir en espanol
+\usepackage[latin1]{inputenc} % para acentos sin codigo
+\usepackage{graphicx} % graficos
+\usepackage{multirow, array} % para las tablas
+\usepackage{float} % para usar [H]
+\usepackage{tabulary}
+\usepackage[spanish]{babel} % para escribir en espanol
+\usepackage[latin1]{inputenc} % para acentos sin codigo
+\usepackage{graphicx} % graficos
+\usepackage{multirow, array} % para las tablas
+\usepackage{float} % para usar [H]
+\usepackage{wrapfig}
+\usepackage{latexsym,amsmath,amssymb,amsfonts,cancel}
+\usepackage[shortlabels]{enumitem}
+\usepackage{subfig}
+\usepackage{bbm,amsthm}
+\usepackage{vmargin}
+\usepackage{fancyhdr,hyperref,url}
+\setlength{\parindent}{0pt}
+
+\setpapersize{A4}
+\setmargins{1.5cm}       % margen izquierdo
+{0cm}                        % margen superior
+{18cm}                      % anchura del texto
+{26cm}                    % altura del texto
+{10pt}                           % altura de los encabezados
+{1cm}                           % espacio entre el texto y los encabezados
+{0pt}                             % altura del pie de página
+{2cm}                           % espacio entre el texto y el pie de página
+
+%Presentación, datos
+
+\begin{document}
+\pagestyle{empty}	
+\begin{center}
+	\begin{Huge}
+		\textbf{La transformada de Fourier en grupos abelianos finitos y algunas aplicaciones}
+	\end{Huge}
+\end{center}
+\begin{center}
+\textbf{Departamento de matem\'aticas, Universidad de Guanajuato.}\\
+\textbf{Mar\'ia de Lourdes Oros Barr\'on.}\\
+
+\textbf{Mayo $2016$.}
+\end{center}
+%\affil{$^1$Departmentamento de Matem\'aticas, Universidad de Guanajuato;  maria.oros@cimat.mx}
+%\affil{$^2$An\'alisis de Fourier, Mayo 2016}}
+
+\setcounter{secnumdepth}{4}
+
+\section{Introducc\'on}
+Las series de Fourier constituyen la herramienta matem\'atica b\'asica del an\'alisis de funciones peri\'odicas a trav\'es de la descomposici\'on de estas como combinaci\'on de senos y cosenos con frecuencias enteras. El nombre de tal teor\'ia se debe al matem\'atico franc\'es Jean-Baptiste Joseph Fourier, qui\'en la desarroll\'o cuando estudiaba la ecuaci\'on del calor. \\
+En este trabajo hablaremos de un caso particular de transformada de Fourier, la transformada discreta de Fourier (TDF). La TDF requiere que la funci\'on de entrada sea una secuencia discreta que suele ser generarada a partir del muestreo de una funci\'on continua y de duraci\'on finita. Esta transformaci\'on \'unicamente eval\'ua suficientes componentes frecuenciales para reconstruir el segmento finito que se analiza. \\
+Se tiene registro de que las primeras aplicaciones de la transformada \textit{discreta} de Fourier fueron las hechas por el matem\'atico franc\'es Alexis Clairaut en $1754$, en su af\'an por calcular \'orbitas. M\'as tarde, en $1984$, el matem\'atico Joseph Louis Lagrange us\'o esta teor\'ia para el c\'alculo de coeficientes de series trigonom\'etricas para describir el modelo de un resorte.\\
+En nuestro trabajo desarrollaremos, en primer lugar, el an\'alisis de Fourier para el caso m\'as simple posible; el grupo multiplicativo de las ra\'ices en\'esimas de la unidad, tal grupo puede ser identificado como el grupo aditivo, c\'iclico, de enteros m\'odulo $n$ que nos presenta un modelo m\'as accesible para tal estudio. Enseguida generalizaremos a los grupos abelianos finitos y concluimos con algunas aplicaciones.\\
+
+%Heading 1
+\section{Los grupos $\mathbf{Z}$ y $\mathbf{Z}/N\mathbf{Z}$}
+Sea $N$ un entero positivo. Un n\'umero complejo $z$ es una ra\'iz en\'esima de la unidad si $z^{N}=1$.
+El conjunto de las ra\'ices en\'esimas de la unidad $\mathbf{Z}(N)$ es un subconjunto de los n\'umeros complejos, que dotado del producto usual en este espacio, constituye un grupo abeliano que será nuestro modelo inicial para el estudio de transformadas de Fourier.\\
+Cabe mencionar que si pensamos en los $N$ puntos equiespaciados sobre el c\'irculo unitario que describe tal conjunto, tendremos una partici\'on uniforme del c\'irculo, que adem\'as es la primer aproximaci\'on a la teor\'ia de series de Fourier en el caso continuo, conforme $N$ tiende a infinito.
+
+% Heading 2
+\subsection{El homomorfismo de los grupos $\mathbf{Z}/N\mathbf{Z}$ y $\mathbf{Z}.$}
+Tomemos la forma polar de las ra\'ices en\'esimas de la unidad, esto es $z=re^{i \theta}$, con $\theta \in [0, 2\pi)$ y $r=1$, implica que $z^{N}=e^{iN \theta}=1$ si y solo si $N \theta = 2\pi k$ con $k \in \mathbf{Z}$.\\
+El conjunto de las ra\'ices en\'esimas de la unidad es precisamente
+$$
+\{e^{\frac{2\pi ik}{N}} \mid k=0,...,N-1 \}
+.$$
+Tal conjunto satisface las siguientes propiedades:
+\begin{itemize}
+    \item Si $z, w \in \mathbf{Z}(N)$ entonces $zw \in \mathbf{Z}(N)$ y $zw=wz.$ 
+    \item $1=e^{\frac{2\pi i0}{N}} \in \mathbf{Z}(N).$
+    \item Si $z \in \mathbf{Z}(N),$ entonces $z^{-1}=\frac{1}{z} \in \mathbf{Z}(N).$ A\'un m\'as $zz^{-1}=1.$
+\end{itemize}
+Hemos de notar que el primer punto merece ser tratado con m\'as delicadeza, esto pues si $w,z \in \mathbf{Z}(N)$ entonces existen $k_{1}, k_{2} \in \{0,...,N-1\}$ tales que $z=e^{\frac{2\pi ik_{1}}{N}}$ y $w=e^{\frac{2\pi ik_{2}}{N}},$ luego $zw=e^{\frac{2\pi i(k_{1}+k_{2})}{N}}$ y nada garantiza que $k_{1}+k_{2} \in \{0,...,N-1\}.$\\
+Denotemos por $\eta=e^{\frac{2\pi i}{N}}.$ \\
+Una forma de resolver el problema anterior es asociar a cada ra\'iz de la unidad $w$ la clase de n tal que $\eta ^{n}=w.$ Haciendo lo anterior para cada ra\'iz de la unidad obtenemos una partici\'on de los enteros en $N$ clases infinitas distintas. De modo que $\mathbf{Z}(N)$ es un grupo abeliano finito con la multiplicaci\'on.\\
+Para formalizar lo anterior decimos que dos enteros $m,n$ son congruentes m\'odulo $N$ si $m-n$ es divisible por $N.$ Tal relaci\'on es una clase de equivalencia en $\mathbf{Z}$.\\
+Sea $x\in \mathbf{Z}$ y definamos $\mathcal{R}(x) = \{x+kN | k\in \mathbf{Z}\}$ la clase residual de $x.$\\ Existen exactamente $N$ clases de equivalencia bajo esta definici\'on y cada una de ellas tiene un \'unico representante entre $0$ y $N-1.$ \\
+Definimos la operaci\'on de grupo, suma de clases residuales, como $\mathcal{R}(x+y)=\mathcal{R}(x)+\mathcal{R}(y).$\\
+De este modo, el grupo descrito es el llamado \textit{grupo abeliano de enteros m\'odulo N} tambi\'en denotado como $\mathbf{Z}/N\mathbf{Z}$, con la operaci\'on suma de clases residuales que hemos definido antes.\\
+Luego, la asociaci\'on $$
+[k] \leftrightarrow e^{\frac{2\pi ik}{N}}
+$$ da una correspondencia entre los grupos abelianos fintos $\mathbf{Z}/N\mathbf{Z}$ y $\mathbf{Z}(N)$ respetando para cada una su respectiva operaci\'on de grupo, tal asociaci\'on es un homomorfismo.\\
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Teoria de Fourier en $\mathbf{Z}/N\mathbf{Z}$}
+
+Sean $G=\mathbf{Z}/N\mathbf{Z}$ y $L^{2} (G)=\{f:G \rightarrow \mathbf{C} \}$ un espacio vectorial finitodimensional en $\mathbf{C},$ con producto interno $<f,g>=\sum\limits_{n=0}^{N-1} f(n)\overline{g(n)},$ definimos entonces la norma de $f$ como $\parallel f\parallel = <f,f>^{1/2},$ donde $\parallel f-g \parallel$ ser\'a la distancia entre $f$ y $g.$ Lo anterior hace a $L^{2}(G)$ un espacio de Hilbert.\\ 
+\textsl{Definici\'on:} Decimos que dos funciones $f,g \in L^{2}(G)$ son ortogonales si $<f,g>=0.$\\
+\textsl{Definici\'on:} Sea $\delta_{a}(j)=1$ si $a\equiv j \textnormal{modN}$ y $\delta_{a}(j)=0$ en otro caso.\\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{TDF}
+
+Nuestro objetivo ahora es encontrar las funciones que jueguen el papel de las exponenciales $\exp_{n}(x)=e^{2\pi inx}$ en el caso del toro. No es dificil saber qui\'en es un buen candidado.\\
+\textsl{Definici\'on:} Sean $a, x \in \mathbf{Z}/N\mathbf{Z}.$ Definimos $$
+e_{a}(x)=\exp(\frac{2\pi iax}{N}).
+$$ Tal funci\'on es independiente de los representantes de las clases de congruencia para $a$ y $x.$\\
+Si $\mathbf{T}$ denota el conjunto de n\'umeros complejos de norma uno, entonces $$
+e_{a}(x): \mathbf{Z}/N\mathbf{Z} \rightarrow \mathbf{T}
+$$ es un homomorfismo de grupos, tambi\'en llamado caracter o representaci\'on de dimensi\'on uno de $G.$\\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textsl{Definici\'on:} Dadas $f,g \in L^{2}(G)$ definimos la convoluci\'on de $f$ y $g$ como: $$
+(f*g)(x) = \sum \limits _{y \in \mathbf{Z}/N\mathbf{Z}} f(y)g(x-y)
+\forall x \in \mathbf{Z}/N\mathbf{Z}.$$\\
+Tal operaci\'on cumple que para todo $f,g,h \in L^{2}(G)$: 
+\begin{itemize}
+	\item f * g = g * f
+    \item (f * g) * h = f * (g * h)
+    \item  Si $\delta_{a}$ es la funci\'on que definimos antes en $\mathbf{Z}/N\mathbf{Z}$, entonces $\delta_{a}*\delta_{b}=\delta_{a+b \textnormal{mod N}}$ y $(f*\delta_{a})(x)=f(x-a).$ 
+ \end{itemize}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textbf{Relaciones de ortogonalidad de los caracteres de $\mathbf{Z}/N\mathbf{Z}$}\\
+La familia $\{e_{0},...,e_{N-1}\}$ es ortogonal, de hecho $(e_{n}, e_{m})= N$ si $m\equiv n \textnormal{mod N}$ o $(e_{n}, e_{m})= 0$ en otro caso. 
+\textsl{Demostraci\'on:}\\
+Sea $e_{l}(k)=\eta ^{lk} .$\\
+Por definici\'on de producto interno $$
+<e_{n}, e_{m}> 
+=\sum\limits_{k=0}^{N-1} \eta ^{mk} \overline \eta ^{lk}
+=\sum\limits_{k=0}^{N-1} \eta ^{mk} \eta ^ {-lk}
+=\sum\limits_{k=0}^{N-1} \eta ^{(m-l)k}.
+$$\\
+De lo anterior, si $n\equiv m\textnormal{mod N}$ entonces $\eta ^{(m-l)k}=1$ y con ello $(e_{n}, e_{m})= N$. De lo contrario, $q=\eta ^{(m-l)k}\neq 1$ y con ello $\sum\limits_{i=0}^{N-1} q^{i} = \frac{1-q^{N}}{1-q} =0$ pues $q^{N}=1.$\\
+Usando lo anterior y haciendo $a=0$ se tiene que: $$\sum\limits_{b\in \mathbf{Z}/N\mathbf{Z}} \exp(\frac{2\pi ib(c-a)}{N})=N\delta_{a}(c).$$\\  
+\textbf{Corolario}\\ 
+La familia $\{e_{0},...,e_{N-1}\}$ es linealmente independiente.\\
+En efecto, si $$
+\beta = \sum\limits_{i=0}^{N-1} c_{i} e_{i}$$ 
+entonces 
+$$
+<\beta, e_{k}> = <\sum\limits_{i=0}^{N-1} c_{i} e_{i}, e_{k}>
+= \sum\limits_{i=0}^{N-1} c_{i} <e_{i}, e_{k}>
+=c_{k} <e_{k}, e_{k}>
+$$ y como $<e_{k}, e_{k}> \neq 0$ entonces $c_{k}=\frac{<\beta, e_{k}>}{\parallel e_{k} \parallel ^{2}}.$ As\'i, cuando $\beta=0$ cada $c_{k}=0$.\\
+
+Como cada $e_{n}$ es tal que $\parallel e_{n}\parallel= \sqrt[]{<e_{n}, e_{n}>}=N$, entonces, si definimos $
+e_{n} ^{*} =\frac{e_{n}}{\sqrt[]{N}}$ tenemos que el conjunto $\{ e_{0} ^{*},\dots, e_{N-1} ^{*}\}$ es una base ortonormal del espacio $L^{2} (G).$\\
+Asi, para cada funci\'on $g$ en los enteros m\'odulo $N,$ se tendr\'a que: $$
+g= \sum\limits_{n=0}^{N-1} <g, e_{n} ^{*}>e_{n} ^{*}
+$$ y $$
+\parallel g \parallel ^{2} = \sum\limits_{n=0}^{N-1} |(g, e_{n} ^{*})|^{2}.
+$$Estos resultados seran sumamente importantes en adelante.\\
+
+Hemos llegado a una de las partes culminantes.\\ 
+Se define el \textit{en\'esimo coeficiente de Fourier de una funci\'on g} como:
+$$
+a_{N}= \frac{1}{N} \sum\limits_{k=0}^{N-1} g(k)e^{\frac{-2\pi ik}{N}}.
+$$\\
+\textbf{Teorema, inversi\'on.} Si $F$ es una funci\'on en $\mathbf{Z}(N)/N\mathbf{Z}(N)$, entonces \\$$
+F(k)=\sum\limits_{k=0}^{N-1} a_{k}e^{\frac{-2\pi ikn}{N}}
+,$$ m\'as a\'un: $$
+\sum\limits_{k=0}^{N-1} |a_{k}|^{2} = 
+\frac{1}{N} \sum\limits_{k=0}^{N-1} |F(k)|^{2}.
+$$\\
+\textbf{Demosraci\'on:}\\
+Sea $\{e_{n}^{*} | n \in \mathbf{N} \}$ la base ortonormal descrita anteriormente.\\ 
+Bastar\'a ver que $$
+a_{N}=\frac{1}{N} <F, e_{n}>=\frac{1}{\sqrt[]{N}} <F, e_{n}^{*}>.$$
+En efecto, $$
+\frac{1}{\sqrt[]{N}}<F,e_{n}^{*}>
+=\frac{1}{\sqrt[]{N}} \sum\limits_{n=0}^{N-1} F(n) \frac{1}{\sqrt[]{N}} e_{n}
+=\frac{1}{N} \sum\limits_{n=0}^{N-1} F(n) e_{n}
+=\frac{1}{N} <F, e_{n}>
+$$
+y como
+$$
+F=\frac{1}{N} \sum\limits_{n=0}^{N-1} <F, e_{n}>e_{n}
+$$ entonces:
+$$
+F=\sum\limits_{n=0}^{N-1} \frac{1}{N} <F, e_{n}>e_{n}
+=\sum\limits_{n=0}^{N-1} a_{n} e_{n}.
+$$
+y con ello,
+$$
+F(k)=\sum\limits_{n=0}^{N-1} a_{n}(k)e^ \frac{2\pi ink}{N}.$$
+Por otro lado:
+$$
+\sum\limits_{n=0}^{N-1} |a_{n}|^{2} = 
+\sum\limits_{n=0}^{N-1} |\frac{1}{N} <F, e_{n}>|^{2}
+= \frac{1}{N^{2}} \sum\limits_{n=0}^{N-1} |<F, e_{n}>|^{2} $$
+$$=
+\frac{1}{N^{2}} \sum\limits_{n=0}^{N-1} (\sqrt[]{N}) ^{2} |<F, e_{n}^{*}>|^{2} =
+\frac{1}{N} \sum\limits_{n=0}^{N-1}|(F, e_{n}^{*})|^{2}:= \frac{1}{N} \parallel F\parallel ^{2}:=
+\frac{1}{N} \sum\limits_{n=0}^{N-1} |F(k)|^{2}.
+$$\\
+
+Cabe destacar que el grupo aditivo $G=\mathbf{Z}/N\mathbf{Z}$ es autodual pues los caracteres $e_{a}$ son parametrizados por $a\in G.$ De hecho $$
+\hat{G}=\{\chi: G \rightarrow \mathbf{Z}(N) | \chi \textnormal{es un homomorfismo de grupos} \}=\{e_{a}(x)=\exp(\frac{2\pi iax}{N})|a\in \mathbf{Z} \}
+$$ con la operaci\'on puntual de funciones $e_{a}e_{b}=e_{a+b\textnormal{mod N}}$ es el grupo dual de $G.$ \\
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Propiedades basicas de la TFD}
+\textbf{Definici\'on} La transformada discreta de Fourier de $f\in L^{2}(\mathbf{Z}/N\mathbf{Z})$ es $$
+\mathcal{F}f(x)=\sum\limits_{y\in \mathbf{Z}/N\mathbf{Z}}f(y)e_{x}(-y)=<f,e_{x}>$$ donde $e_{a}(x)=\exp(\frac{2\pi iax}{N}).$\\
+\begin{itemize}
+	\item $\mathcal{F}: L^{2} (G) \rightarrow L^{2} (G)$ es una transformaci\'on lineal.\\ 
+    En efecto, si $f, g \in L^{2} (G)$ y $\alpha \in \mathbf{C}$ entonces $$
+    \mathcal{F} (f(x)+\alpha g(x))= \sum \limits _{y \in \mathbf{Z}/N\mathbf{Z}} (f(y)+\alpha g(x))e_{x}(-y)$$ $$=
+    \sum \limits _{y \in \mathbf{Z}/N\mathbf{Z}} f(y)e_{x}(-y)+\alpha\sum\limits _{y \in \mathbf{Z}/N\mathbf{Z}} g(x)e_{x}(-y) = \mathcal{F}f(x)+\alpha\mathcal{F}g(x)
+    $$ $\forall x \in \mathbf{Z}/N\mathbf{Z}.$
+    \item \textrm{Convoluci\'on:} $\mathcal{F} (f*g)(x)=\mathcal{F}f(x) \cdot \mathcal{F}g(x) \forall x \in \mathbf{Z}/N\mathbf{Z}.$
+\end{itemize}
+
+Basados en el hecho de que la suma finita no se ve afectada por reordenamientos o cambio de variables. 
+Como $$
+\mathcal{F}(f*g)(a)=\sum\limits_{b\in \mathbf{Z}/N\mathbf{Z}} (f*g)(b)\exp(-\frac{2\pi iab}{N})
+$$ entonces
+$$
+=\sum\limits_{b\in \mathbf{Z}/N\mathbf{Z}} \exp(-\frac{2\pi iab}{N})\sum\limits_{c\in \mathbf{Z}/N\mathbf{Z}} f(c)g(b-c)=\sum\limits_{c\in \mathbf{Z}/N\mathbf{Z}}\sum\limits_{d\in \mathbf{Z}/\mathbf{Z}}\exp(-\frac{2\pi ia(c+d)}{N})f(c)g(d)
+$$ habiendo hecho $d=b-c,$
+$$
+=\sum\limits_{b\in \mathbf{Z}/N\mathbf{Z}} \exp(-\frac{2\pi iab}{N})f(c) \sum\limits_{b\in \mathbf{Z}/N\mathbf{Z}}\exp(-\frac{2\pi iab}{N}) g(d)=\mathcal{F}f(a)\cdot \mathcal{F}g(a).
+$$\\
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Heading 3
+\section{La transformada de Fourier en grupos abelianos finitos} 
+Nuestro objetivo ahora es generalizar los resultados vistos hasta este momento sobre las expansiones en series de Fourier en el grupo $\mathbf{Z}(N)$ a grupos abelianos finitos.\\
+Para lo anterior nos apoyaremos de uno de los teoremas m\'as fuertes de la teor\'ia de grupos.\\ 
+
+\textbf{Teorema fundamental de grupos abelianos finitos}\\
+Cualquier grupo abeliano finito $G$ es isomorfo a la suma directa de grupos c\'iclicos, esto es: $$
+G \tilde{=} (\mathbf{Z}/m_{1}\mathbf{Z})\oplus \cdots \oplus(\mathbf{Z}/m_{r}\mathbf{Z})
+$$ donde cada $(\mathbf{Z}/m_{r}\mathbf{Z})$ es c\'iclico.\\
+
+Dado entonces $G$ un grupo abeliano finito, lo suponemos de la forma anterior, con la suma componente a componente.\\ 
+Como antes, $L^{2}(G)$ denotara el espacio vectorial de las funciones de $G$ a los complejos, dotado del producto interno que hemos estado usando desde el inicio.\\
+
+\subsection{Caracteres} 
+\textbf{Definici\'on:} \textsf{Un caracter} $\chi$ de un grupo abeliano finito $G$ es un homomorfismo de $G$ al grupo multiplicativo $\boldmath T$ de los n\'umeros complejos de norma $1.$\\
+Para $$
+G = (\mathbf{Z}/m_{1}\mathbf{Z})\oplus \cdots \oplus(\mathbf{Z}/m_{r}\mathbf{Z})
+$$ el siguiente producto de exponenciales da los caracteres de $G:$ $$
+\chi (x)=e_{a}(x)=e_{a_{1}}(x_{1})\cdots e_{a_{r}}(x_{r})
+$$ donde $e_{a_{}}(x_{j})=\exp(2\pi ia_{i}x_{i}/m_{i}).$\\ 
+De hecho, $e_{a}$ es un grupo de caracteres de $G$ para cada $a \in G.$\\
+Definimos el grupo dual $\hat{G}$ de $G:$
+$$
+\hat{G}:=\{\chi | \chi \textnormal{es un caracter de G}\}
+$$ con el producto $\chi \phi (x)=\chi(x) \phi (x) \forall x\in G.$ Es f\'acil ver que tal espacio hereda la estructura conmutativa de $G.$\\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textbf{Lema 1} El grupo $\hat{G}$ es un grupo abeliano bajo la operaci\'on $
+(e_{1}\cdot e_{2})(a)=e_{1}(a)\cdot e_{2}(a).$\\
+Se sigue la demostraci\'on luego de recordar que el caracter trivial juega el papel de elemento neutro.\\
+MA\'as a\'un, el conjunto de caracteres de un grupo abeliano finito $G$ forma una base del espacio vectorial de funciones en $G.$\\
+\textbf{Lema 2} Sean $G$  un grupo abeliano finto y $e: G\rightarrow \mathbf{C}^{*}$ con la operaci\'on producto, $e(a\cdot b)=e(a)\cdot e(b)$ para todas $a,b \in G.$ Entonces $e$ es un caracter. \\
+Demostraci\'on: \\
+Como $G$ es finito, entonces $|e(a)|$ est\'a acotado para todo valor de $a$ en $G.$ Luego, como
+$|e(b^{N})|=|e(b)|^{N}$ entonces $|e(b)|=1$ para todo $b \in G.$\\
+
+%------------------------------------------------
+\subsection{TFD}
+La transformada discreta de Fourier de $f \in L^{2}(G)$ s define como:$$
+\mathcal{F}f(\chi)=\hat{f}(\chi)=\sum\limits_{a\in G} f(a) \overline{\chi(a)}=<f,  \chi>$$ para $\chi \in \hat{G}$.\\
+Esta funci\'on hereda las propiedades basicas de la transformada de Fourier de las que hablamos antes.
+
+%------------------------------------------------
+\subsubsection{Propiedades basicas de TF en grupos abelianos finitos}
+\begin{itemize}
+	\item $\mathcal{F}: L^{2}(G) \rightarrow L^{2}(\hat{G})$ es una funci\'on lineal y biyectiva.\\
+La linealidad es clara. A\'un as\'i, si $f,g \in L^{2}(G)$ y $\lambda \in \mathcal{C}$ entonces $$\mathcal{F}(f+\lambda g)(\chi)=\sum\limits_{a\in G} (f+\lambda g)(a) \overline{\chi(a)}=\sum\limits_{a\in G} f(a) \overline{\chi(a)} +\lambda\sum\limits_{a\in G} g(a) \overline{\chi(a)}=\mathcal{F}f(\chi)+\lambda\mathcal{F}g(\chi)$$ para $\chi \in \hat{G}.$\\
+Que sea biyectiva se seguir\'a del tercer inciso, donde se exhibe la inversa.\\
+	\item \textsl{Convoluci\'on:} Se define como $$
+(f *g)(x)=\sum\limits_{y\in G} f(y)g(x-y)
+$$ para $x\in G.$\\ 
+Bajo la transformada de Fourier: $$\mathcal{F}(f*g)(\chi)=\mathcal{F}f(\chi) \cdot \mathcal{F}g(\chi)$$ para toda $\chi \in \hat{G}.$\\
+
+Basados en el hecho de que la suma finita no se ve afectada por reordenamientos o cambio de variables manejaremos las sumasa nuestro convenir como hemos hecho antes.\\ 
+Sean $f,g \in L^{2}(G).$ Como $$
+\mathcal{F}(f*g)(\chi)=\sum\limits_{a\in \mathbf{Z}/N\mathbf{Z}} (f*g)(a) \overline{\chi(a)}
+$$ entonces
+$$
+=\sum\limits_{a\in \mathbf{Z}/N\mathbf{Z}} \overline{\chi(a)} \sum\limits_{c\in \mathbf{Z}/N\mathbf{Z}} f(c)g(a-c)=\sum\limits_{c\in \mathbf{Z}/N\mathbf{Z}}\sum\limits_{b\in \mathbf{Z}/\mathbf{Z}}\overline{\chi(c+b)}f(c)g(b)
+$$ habiendo hecho $b=a-c,$
+$$
+=\sum\limits_{b\in \mathbf{Z}/N\mathbf{Z}} \overline{\chi(c)}f(c) \sum\limits_{b\in \mathbf{Z}/N\mathbf{Z}}\overline{\chi(b)} g(b)=\mathcal{F}f(\chi)\cdot \mathcal{F}g(\chi).
+$$\\
+
+\item \textsl{Inversi\'on:}$$
+f(x)=\frac{1}{|G|} \sum\limits_{\chi \in \hat{G}} \mathcal{F}f(\chi) \chi(x).$$\\
+De la defiici\'on $$\frac{1}{|G|} \sum\limits_{\chi \in \hat{G}} \mathcal{F}f(\chi) \chi(x)=\frac{1}{|G|} \sum\limits_{\chi \in \hat{G}} (\sum\limits_{a\in G} f(a) \overline{\chi(a)}) \chi(x)$$
+entonces $$
+=\frac{1}{|G|} \sum\limits_{\chi \in \hat{G}} (\sum\limits_{a\in G} f(a) \overline{\chi(a)} \chi(x))$$de las relaciones de ortogonalidad, la suma anterior se ve afectada \'unicamente si $a=x$ y como $\chi(t)$ tiene norma uno para toda $t,$ entonces $$=\frac{1}{|G|} \sum\limits_{\chi \in \hat{G}} f(x)=\frac{1}{|G|} |G|f(x)=f(x).
+$$
+
+\item Identidad de Parseval: $$
+<f,f>=\frac{1}{|G|}<\mathcal{F}f,\mathcal{F}f>.
+$$ aqui el producto interno de $F,H \in L^{2}(G)$ es $<F,G>=\sum\limits_{\chi \in \hat{G}} F(\chi) \overline{H(\chi)}$. \\
+El Lema enunciado enseguida ser\'a de gran utilidad. Supongamoslo cierto.\\
+Por definici\'on: $$
+<\mathcal{F}f,\mathcal{F}f>=\sum\limits_{\chi \in \hat{G}} \mathcal{F}f(\chi) \cdot \overline{\mathcal{F}f(\chi)}= \sum\limits_{\chi \in \hat{G}} (\sum\limits_{a\in G}f(a)\overline{\chi(a)})\cdot \overline{(\sum\limits_{a\in G}f(a)\overline{\chi(a)})}
+$$
+
+$$
+=\sum\limits_{\chi \in \hat{G}} (\sum\limits_{a\in G}f(a)\overline{\chi(a)})\cdot {(\sum\limits_{a\in G}\overline{f(a)} \chi(a))}
+$$ de las relaciones de ortogonalidad lo anterior es de la forma $$
+\sum\limits_{\chi \in \hat{G}} (\sum\limits_{a\in G}|f(a)|^{2}|\chi(a)|^{2})=\sum\limits_{\chi \in \hat{G}} (\sum\limits_{a\in G}|f(a)|^{2})=|G|\parallel f \parallel = |G|<f,f >
+$$ en lo anterior usamos que las funciones $\chi$ son unitarias.
+\end{itemize}
+
+\subsubsection{Lema de ortogonalidad de caracteres}
+Dados $\Phi, \Psi \in G$ se tiene que $<\Phi, \Psi>=|G|$ si $\Phi= \Psi$ y $<\Phi, \Psi>=0$ en otro caso.\\
+Demostraci\'on: \\
+Reduzcamos al caso $\Psi=1.$
+Sea $
+S=<\Phi,1>=\sum\limits_{a\in G} \Phi(a).
+$\\
+Si $\Phi$ no es el caracter trivial entonces $\Phi(c)\neq 0$ para algun $c\in G.$ As'i
+$$\Phi(c)S=\Phi(c) \sum\limits_{a\in G} \Phi(a)=\sum\limits_{a\in G} \Phi(c)\Phi(a)=\sum\limits_{a\in G} \Phi(c+a)=\sum\limits_{b\in G} \Phi(b)=S
+$$ donde se hizo el cambio $b=c+a.$\\
+De lo anterior $\Phi(b)S=S$ con $\Phi(b)\neq 0.$ Se sigue que $S=0.$
+
+%------------------------------------------------
+%Example of a Figure
+\section{Algunas aplicaciones}
+
+\subsection{Aplicaci\'on a geometr\'ia}
+
+Dado un entero positivo $k\geq 2,$ sea $\sqcap= \{z(0),\cdots,z(k-1)\}$ un poligono cerrado en el plano, donde $z: \mathbf{Z}/k\mathbf{Z} \rightarrow \mathbf{C}.$ Definamos $Dz(j)=\frac{1}{2}\{z(j-1)+z(j)\},$ el punto medio de la arista que une los v\'ertices $z(j-1)$ y $z(j).$ En la notaci\'on de funciones delta, claramente podemos escribir: $Dz=\frac{1}{2}\{(\delta_{1}+\delta_{0})*z\}.$\\
+Consideremos ahora el primer pol\'igono derivado de $\sqcap$ definido como $$
+\sqcap '=\{Dz(1),\dots, Dz(n-1)\}
+.$$ De manera recursiva podemos escribir el err\'esimo pol\'igono derivado de $\sqcap$ como $\sqcap ^{r}=(\sqcap ^{r-1})'.$\\
+Por otro lado, se define el centro de gravedad de un pol\'igono cerrado como $$
+P = \frac{1}{k} \sum\limits_{i=0}^{k-1} z(i).
+$$\\
+\textbf{Teorema: Los pol\'igonos derivados aproximan al centro de gravedad del pol\'igono original}
+Dado un pol\'igono cerrado simple en el pla$\sqcap$ en el plano y $\sqcap ^{r}=(\sqcap ^{(r-1)})'$ su err\'esimo pol\'igono derivado, entonces se cumple que $
+\sqcap ^{(r)} \rightarrow P
+$ conforme $r\rightarrow \infty.$\\
+\textbf{Demostraci\'on:}\\
+Por simplicidad, supongamos que el centro de gravedad $P$ de $\sqcap$ est\'a en el origen, esto es: $0=\sum_{j=0}^{k-1} z(j).$
+Sea, como antes, $$
+Dz=\frac{1}{2}(\delta_{0}+\delta_{1})*z=d*z
+$$ con $d=\frac{1}{2}(\delta_{0}+\delta_{1}).$ Queremos encontrar $$
+\lim\limits_{r\rightarrow \infty}(d*\dots*d*z)(j).
+$$\\
+Ahora, como $\mathcal{F}\delta_{s}(a)=\sum\limits_{s\in S} \exp(-\frac{2\pi ias}{k})$ entonces $$
+\mathcal{F}(d*z)(j)=\mathcal{F}d(j) \cdot \mathcal{F}z(j)=\frac{1}{2}(1+\exp(-\frac{2\pi ij}{k}))\mathcal{F}z(j).
+$$\\
+Luego $$
+\lim\limits_{r\rightarrow \infty}(\mathcal{F}d(j)) ^{r} = \lim\limits_{r\rightarrow \infty} ({\frac{1}{2}(1+\exp(-\frac{2\pi ij}{k}))})^{r}.
+$$\\
+Probaremos que:
+$({\frac{1}{2}(1+\exp(-\frac{2\pi ij}{k}))})^{r}=\exp(\frac{-\pi rij}{k}){cos(\frac{\pi j}{k})}^{r} \forall r \in \mathbf{N}$ por inducci\'on sobre $r$ pues tal identidad nos permitir\'a calcular el l\'imite de manera m\'as sencilla.\\
+El caso base es sencillo luego de recordar las identidades trigonom\'etricas: $\cos (2\theta)=2\cos ^{2} (\theta)-1$ y $\sin(2\theta)=2\sin (\theta)\cos(\theta),$ $\cos(\theta)=\cos(-\theta)$ adem\'as de que la exponencial compleja se ve de la forma: $e^{i\theta}=\cos(\theta)+i\sin(\theta).$ Sustituyendo lo anterior para $r=1$ se tiene que: $$
+\frac{1}{2}(1+\exp(-\frac{2\pi ij}{k}))=\frac{1}{2}(1+\cos(\frac{2\pi j}{k})+i\sin(\frac{2\pi j}{k}))$$
+$$=\frac{1}{2}(1+2\cos ^{2} (\frac{\pi j}{k})-1-i2\sin (\frac{\pi j}{k})\cos(\frac{\pi j}{k}))
+$$
+$$
+=\cos(\frac{\pi j}{k})(\cos(\frac{\pi j}{k})-i\sin(\frac{\pi j}{k}))
+=\cos(\frac{\pi j}{k})(\cos(-\frac{\pi j}{k})-i\sin(\frac{\pi j}{k}))
+=\cos(\frac{\pi j}{k})\exp(-\frac{\pi ij}{k}).
+$$\\
+Supongamos ahora que la identidad es cierta para $r$ y demostr\'emosla para $r+1.$ Como:$$
+\exp(-\frac{\pi (r+1)ij}{k})\cos(\frac{\pi j}{k})^{r+1}
+=[\exp(-\frac{\pi rij}{k})\cos(\frac{\pi j}{k})^{r}
+][\exp(-\frac{\pi ij}{k})\cos(\frac{\pi j}{k})]
+$$ del paso inductivo se sigue que $$
+({\frac{1}{2}(1+\exp(-\frac{2\pi ij}{k}))})^{r}({\frac{1}{2}(1+\exp(-\frac{2\pi ij}{k}))})=({\frac{1}{2}(1+\exp(-\frac{2\pi ij}{k}))})^{r+1}
+$$ como queriamos.\\
+Usando lo anterior y observando que si $j=1,\cdots,k-1$ entonces $|cos(\frac{\pi j}{k})|<1,$ implicar\'a que $\lim\limits_{r\rightarrow \infty} exp(-\frac{r\pi ij}{k})cos(\frac{\pi j}{k})^{r}= 0,$ mientras que si $j \equiv 0 \textnormal{mod k}$ entonces $|cos(\frac{\pi j}{k})|=1$ y con ello $\lim\limits_{r\rightarrow \infty} exp(-\frac{r\pi ij}{k})cos(\frac{\pi j}{k})^{r}= 1.$
+\\
+De lo anterior, si $j\in \{1,...,k-1\}$ entonces $$
+\lim\limits_{r\rightarrow \infty}\mathcal{F}D^{r}z(j)=\lim\limits_{r\rightarrow \infty}(\mathcal{F}d(j))^{r}\mathcal{F}z(j)=0.
+$$\\
+Mientras que si $j\equiv 0 \textnormal{modN}$ entonces $(\mathcal{F}z(j))=\sum\limits_{y\in \mathbf{Z}/k\mathbf{Z}}f(y)e_{0}(-y)=\sum\limits_{y\in \mathbf{Z}/k\mathbf{Z}}f(y)=0$ por el supuesto de que el centro de masa est\'a en el origen.\\
+Por lo tanto $\lim\limits_{r\rightarrow \infty}\mathcal{F}(D^{r}z)(j)=0$ para todo $j.$ \\
+QED.
+
+\subsection{El modelo de la urna de Ehrenfest}
+En adelante:
+\begin{itemize}
+\item $\textit{F}_{2} ^{d}$ ser\'a el grupo de dtuplas con entradas $0$ y $1$ o enteros m\'odulo $2$.
+\item Dado un conjunto $G$ y una relaci\'on $S$ definimos $\mathbf{X}=(G, S)$ como la grafica de $G.$
+\item Bajo la definici\'on anterior se define la matriz de adyacencia $A$ de modo que $A_{ij}=1$ si $i$ est\'a relacionado con $j$ y cero en otro caso.
+\item $S(1)=\{x\in \textit{F}_{2} ^{d} | \textnormal{x tiene exactamente una entrada no nula}.\}$
+\item Se define el grado de un nodo de una gr\'afica como el n\'umero de vecinos que tiene, es decir, la cantidad de nodos adyacentes a el. 
+\item Dada $A$ una matriz de adyacencia de la gr\'afica $\mathbf{X}$ y $k$ el grado de la gr\'afica, (donde el conjunto de estados ser\'an los v\'ertices de la gr\'afica, o el grupo dado), se define la cadena de Markov para $A$ como sigue: Al tiempo $t$ el proceso va del estado $i$ al $j$ con probabilidad $\frac{1}{k}$ si $i$ est\'a relacionado con $j$ y cero si no. La matriz de Markov es:
+$$
+T=\frac{1}{d}A.
+$$
+\end{itemize}
+\subsubsection{Algunos resultados previos}
+Dada una gr\'afica $X,$ el operador de adyacencia $A$ act\'ua en las funciones $f: X \rightarrow \mathbf{C}$ como $$
+Af(x)=\sum\limits_{\textnormal{y es adyacente a x}}f(y)
+$$ para cualquier v\'ertice $x\in X.$\\
+Dado un grupo $G$ y una relaci\'on $S$ llamaremos a $X=(G,S)$ g\'afica de Cayley.\\
+Para una gr\'afica de Cayley $X(\mathbf{Z}/N\mathbf{Z},S)$ el operador de adyacencia es una convoluci\'on de la forma: $$
+Af(x)=\sum\limits_{s\in S} f(x+s)=(\delta_{s}*f)(x).$$\\
+Dado un operador lineal $T$ del espacio vectorial $L^{2}(X)$ en s\'i mismo, buscaremos una base del espacio que nos permita expresar a $T$ tan simple como sea posible.\\
+Como antes, definimos un producto interno para $f,g \in L^{2}(X)=V$ como $$<f,g>=\sum\limits_{x\in X}f(x)\overline {g(x)}.$$\\
+Respecto a este producto interno, nuestro operador $A$ de adyacencia es autoadjunto, es decir, satisface: $<Av,w>=<v,Aw>$ para cualesquiera $v,w \in V.$\\
+En efecto $$
+<Af,g>=\sum\limits_{x\in X} (Af)(x) \overline{g(x)}=\sum\limits_{x\in X}\overline{g(x)} \sum\limits_{\textnormal{x es adyacente a y}} f(x) 
+$$ luego, como $x$ es adyacente a $y$ si y solo si $y$ es adyacente a $x$ entonces es cierto que: $$
+=\sum\limits_{x\in X}f(x) \sum\limits_{\textnormal{x es adyacente a y}} \overline{g(x)}=\sum\limits_{x\in X} f(x) \overline{Ag(x)}=<f,Ag>.
+$$\\
+\textbf{Teorema del espectro de una gr\'afica de Cayley.}\\
+Dada una gr\'afica $X(\mathbf{Z}/N\mathbf{Z},S)$, los valores propios de la matriz de adyacencia son $$\mathcal{F} \delta_{s}(a)=\sum\limits_{s\in S}e^{-\frac{2\pi ias}{N}}.$$\\
+El conjunto ed valores propios de tal matriz es llamado el espectro de la grafica asociada.¯
+Demostraci\'on:\\
+Como hemos dicho antes que el operador de adyacencia de una gr\'afica de Cayley es una convoluci\'on de la forma $$Af=\delta_{s}*f$$ donde $\delta_{S}(x)=1$ si $x\in S$ y cero en otro caso.\\
+Aplicando la transformada de Fourier se tiene que $$
+\mathcal{F}Af(a)=\mathcal{F}(\delta_{s}*f)(a)=\mathcal{F}\delta_{s}(a)\cdot \mathcal{F}f(a).$$\\
+Haciendo $h=\mathcal{F}f$ la espresi\'on anterior es de la forma: $$
+[\mathcal{F}A \mathcal{F^{-}} (h)](a)=\mathcal{F}\delta_{S}(a)\cdot h(a).
+$$ Lo anterior nos dice que hemos diagonalizado el operador $A.$ Los valores propios de $A$ son de hecho los n\'umeros $\mathcal{F}\delta_{S}(a)$ para $a\in \mathbf{Z}/N\mathbf{Z}.$\\
+Definici\'on: Una gr\'afica de Cayley es no bipartita si el espectro de la matriz de Markov asociada, es $\lambda_{1}=1> \lambda_{2}\geq \cdots \geq \lambda_{n}>-1.$ Por el contrario, es bipartita sii $-1$ es un valor propio.\\ 
+En adelante, dadas una gr\'afica y probabilidades de transici\'on entre los estados, llamaremos a esto una caminata aleatoria.\\
+
+\textbf{Espectro de la matriz de adyacencia para la gr\'afica $\textit{X}=(\textit{F}_{2} ^{d}, \{u_{1},\cdots,u_{d}\}).$}\\
+Para $a\in \textit{F}_{2} ^{d},$ sea $e_{a}(x)=(-1)^{a^{t}x}$ y sup\'on que $u_{j}$ son los vectores basicos de $\textit{F}_{2} ^{d}.$ Entonces los valores propios $\lambda_{a}$ del operador $A$ para la gráfica $\textit{X}$ est\'an dados por $$
+\lambda_{a}=\sum\limits_{j=1}^{d}e_{a}(u_{j})=\sum\limits_{j=1}^{d}(-1)^{a_{j}}=d-2|a|
+$$ donde $|a|$ es el n\'umero de entradas del vector $a$ que son distintas de cero.\\
+As\'i, el espectro de $A$ es, $\textmd{Spec A}=\{d,d-2,\cdots, -d+2, -d\}.$\\
+
+
+\textbf{Teorema: Caminatas aleatorias aproximan a la distribuci\'on unifrome} \\
+Sea $X$ una grafica de $n$ v\'ertices, conexa, no bipartita donde cada v\'ertice tiene grado $k.$ Sea $A$ el operador de adyacencia de $X$ y $T=\frac{1}{k}A$ la matriz de transici\'on u operador de Markov. Entonces para cada funci\'on de probabilidad en $X,$ digamos $p(x)\geq 0$ para todo $x\in X$ tal que $\sum\limits_{x\in X}p(x)=1$ se cumple que $$ \lim_{t\rightarrow \infty} T^{t}p=u$$ donde $u$ la distribuci\'on uniforme se define como $u(x)=\frac{1}{n}.$\\
+Demostraci\'on:\\ 
+Por el Teorema de espectro para $T,$ existe un conjunto ortonormal $\phi_{1},\cdots,\phi_{N}$ en $L^{2}(X)$ tal que:
+$$
+T\phi_{j}=\lambda \phi_{j}
+$$ con $j=1,\cdots,N.$\\
+Entonces cada $f\in L^{2}(X)$ tiene una expansi\'on en series de Fourier de la forma 
+$$
+f(x)=\sum\limits_{i=1}^{N} <f,\phi_{i}>\phi_{i}(x),
+$$ $$
+Tf(x)=\sum\limits_{i=1}^{N}<f,\phi_{i}>\lambda_{i}\phi_{i}(x).
+$$\\
+De lo anterior, para cualquier funci\'on de probabilidad $p,$ tenemos que $$
+T^{t}p(x)=\sum\limits_{i=1}^{N}<p,\phi_{i}>\lambda_{i}^{t}\phi_{i}(x).
+$$\\
+Usando el hecho de que la gr\'afica es bipartita, como $\lambda_{1}=1$ y $\lambda_{j}<1$ si $j\neq 1$ entonces $\lim\limits_{t\rightarrow \infty} \lambda_{i}^{t}=0$ si $i\neq 1$ y es uno si $i=1.$\\
+Se sigue que solo el primer t\'ermino afectar\'a la suma, m\'as a\'un: $$
+\lim\limits_{t\rightarrow \infty} T^{t}p=<p,\phi_{1}>\phi_{1}
+$$ $$
+=<p,\frac{1}{\sqrt[]{N}}>\frac{1}{\sqrt[]{N}}=\frac{1}{N}<p,1>=\frac{1}{N}
+$$ pues $p$ es un vector de probabilidad.\\ 
+QED.
+\subsection{Din\'amica del modelo de la Urna de Ehrenfest}
+Se tienen $d$ bolas distribuidas en dos urnas $A$ y $B.$ Se elige una bola al azar y se cambia de urna. Repetimos el proceso $k$ veces.\\
+Nos interesa saber si existir\'a una distribuci\'on l\'imite\\ Lo anterior nos dir\'ia que el proceso alcanza un nivel de equilibrio.\\
+Modelamos el comportamiento del sistema de la siguiente manera.\\
+Al tiempo $t$, el estado del sistema corresponder\'a a un vector $v \in\textit{F}_{2} ^{d}$ donde $v_{i}=1$ si la bola i\'esima est\'a en $A$ y cero en otro caso.
+El estado cambia eligiendo una coordenada $v_{i}$ y cambi\'andola a $v_{i}+1.$ La matriz de la cadena de Markov es: $$ T=\frac{1}{d}A
+$$ donde $A$ es la matriz de adyacencia de la gr\'afica $X=(\textit{F}_{2} ^{d}, \textsf{S}(1)).$\\
+Afirmamos que los valores de $T$ son precisamente $\{1,1-\frac{2}{d},1-\frac{4}{d},\cdots, -1+\frac{2}{d},-1\}.$\\
+
+En nuestro af\'an por cumplir las hip\'otesis del Teorema anterior, vamos a considerar la posibilidad de que la bola se quede en un mismo lugar, esto es, modificamos la gr\'afica de modo que $$
+X(\textit{F}_{2}^{d},S(1)\cup \{0\})
+$$ es nuestro modelo de estudio. Tal gr\'afica es conexa, no bipartita.\\ Tenemos ahora una matriz de transici\'on de la forma $$
+T'=\frac{1}{d+1}(I+A)
+$$ donde $A$ es el operador de adyacencia de la gr\'afica original. Tenemos ahora una gr\'afica conexa, no bipartita. Entonces el espectro de $T'$ es $$
+\{1,1-\frac{2}{d+1},1-\frac{4}{d+1},\cdots, -1+\frac{2}{d+1}\}.
+$$\\
+Luego $$
+\lim\limits_{k\rightarrow \infty}T^{k}p
+$$ existe para un vector de probabilidad $p,$ y m\'as a\'un, por el Teorema de caminatas aleatorias, tal distribuci\'on converge a la distribuci\'on uniforme.\\
+%------------------------------------------------
+\begin{thebibliography}{96}
+\expandafter\ifx\csname
+natexlab\endcsname\relax\def\natexlab#1{#1}\fi
+
+\bibitem{Fourier analysis on finite groups and applications.}
+Fourier analysis on finite groups and applications. Audrey Terras. \textit{Ch2-Ch12.}
+
+\bibitem{Stein}
+Fourier analysis, an introduction. {Stein and Shakarchi.} Ch7.
+
+\end{thebibliography}
+\end{document}
